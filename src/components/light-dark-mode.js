@@ -42,7 +42,7 @@ const LightDarkModeStyled = styled.div`
 `;
 
 function LightDarkMode() {
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState("dark");
   const nextMode = mode === "light" ? "dark" : "light";
   useEffect(() => {
     document.body.dataset.theme = mode;
