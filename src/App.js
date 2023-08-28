@@ -44,12 +44,14 @@ function App() {
     getRepos(username)
       .then(({ data }) => {
         setRepoState("success");
-        setGitRepos(data.splice(0, finalPagination)); //separar en arrays de 4
+        setGitRepos(data); //separar en arrays de 4
       })
       .catch(() => setGitRepos("error"));
   }, [username, finalPagination]);
 
-  const repoResults = gitRepos?.filter((repo) => {
+  const newGitRepos = [...gitRepos].sort(compararFechas);
+
+  const repoResults = newGitRepos?.splice(0, finalPagination).filter((repo) => {
     const noTildes = (text) => {
       return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     };
@@ -64,7 +66,12 @@ function App() {
   if (sortRepo === "Stars") {
     filterLanguage.sort((a, b) => b.stargazers_count - a.stargazers_count);
   }
-  // const filterSort = filterLanguage.filter((repo) => repo.name === sortRepo);
+
+  function compararFechas(a, b) {
+    const fechaA = new Date(a.pushed_at);
+    const fechaB = new Date(b.pushed_at);
+    return fechaB - fechaA;
+  }
 
   return (
     <>
